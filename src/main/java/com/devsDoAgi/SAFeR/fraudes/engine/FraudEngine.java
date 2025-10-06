@@ -18,53 +18,48 @@ import com.devsDoAgi.SAFeR.fraudes.interfaces.FraudRule;
 import com.devsDoAgi.SAFeR.fraudes.rules.RuleValor;
 import com.devsDoAgi.SAFeR.fraudes.rules.emAnalise.RuleValueValidator;
 import com.devsDoAgi.SAFeR.model.Transacao;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@AllArgsConstructor
 public class FraudEngine {
-    private final List<FraudRule> rules;
+
+
+    RulesCompiler rulesCompiler;
 
     /**
      * Construtor Seletivo
      * Executa apenas as regras que forem atribuidas
      */
 
-    @Autowired
-    public FraudEngine(RuleValueValidator valueValidator) {
-        this.rules = List.of(valueValidator); // usa o bean gerenciado pelo Spring
-    }
+//    @Autowired
+//    public FraudEngine(RuleValueValidator valueValidator) {
+//        this.rules = List.of(valueValidator); // usa o bean gerenciado pelo Spring
+//    }
+//
+//    public FraudEngine(List<FraudRule> rules) {
+//        this.rules = rules;
+//    }
 
-    public FraudEngine(List<FraudRule> rules) {
-        this.rules = rules;
-    }
-
-    /**
-     * Construtor Padrão
-     * Executa todas as regras por padrão
-     */
+//    /**
+//     * Construtor Padrão
+//     * Executa todas as regras por padrão
+//     */
 
 //    public FraudEngine() {
 //        this.rules = (List.of(
 //                new RuleValueValidator()
 //        ));
 //    }
-
-    /**
-     * Avalia a transação com todas as regras atribuidas no construtor.
-     *
-     * @param transacao -> Consome um objeto Transacao.
-     * @return FraudSummary -> Retorna um objeto FraudSummary.
-     */
+//
+//    /**
+//     * Avalia a transação com todas as regras atribuidas no construtor.
+//     *
+//     * @param transacao -> Consome um objeto Transacao.
+//     * @return FraudSummary -> Retorna um objeto FraudSummary.
+//     */
 
     public FraudSummary analyze(Transacao transacao) {
-        int totalScore = 0;
-
-        for (FraudRule rule : rules) {
-            FraudResult result = rule.evaluate(transacao);
-            System.out.println("Regra [" + result.getRuleName() + "] -> Score: " + result.getScore());
-
-            totalScore += result.getScore();
-        }
-
-        return new FraudSummary(transacao.getIdTransacao(), totalScore);
+        return rulesCompiler.percorrerRegras(transacao);
     }
 }

@@ -38,8 +38,7 @@ public class RuleValueValidator implements FraudRule {
 
         Conta conta = contaRepository.findById(transacao.getNumContaOrigem()).orElseThrow(()-> new AccounNotFound("Conta não encontrada"));
 
-        Conta clientAccount = transacao.getConta();
-        List<Transacao> transacoes  = clientAccount.getHistoricoTransacoes();
+        List<Transacao> transacoes  = conta.getHistoricoTransacoes();
 
         if (transacoes.size() <= 10){ return BASE_CEILING; }
 

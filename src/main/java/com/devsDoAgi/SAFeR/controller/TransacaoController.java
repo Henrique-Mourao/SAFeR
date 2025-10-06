@@ -37,7 +37,7 @@ public class TransacaoController {
     @PostMapping("/testeluan")
     public TransacaoResponseDTO validarTransacao(@RequestBody TransacaoRequestDTO dto){
         Transacao transacao = transacaoMapper.toEntity(dto);
-        return transacaoService.testeValidacao(transacao);
+        return transacaoService.criarEValidarTransacao(dto);
     }
 
     @PostMapping

@@ -3,6 +3,8 @@ package com.devsDoAgi.SAFeR.service;
 import java.util.List;
 
 import com.devsDoAgi.SAFeR.exception.TransactionNotFound;
+import com.devsDoAgi.SAFeR.fraudes.engine.RulesCompiler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.devsDoAgi.SAFeR.repository.ContaRepository;
@@ -21,6 +23,8 @@ import com.devsDoAgi.SAFeR.model.Transacao;
 @Service
 public class TransacaoService {
 
+    @Autowired
+    RulesCompiler rulesCompiler;
 
     
     private final TransacaoRepository transacaoRepository;
@@ -41,11 +45,11 @@ public class TransacaoService {
         return transacaoMapper.toResponseDTO(salva);
     }
 
-    @Transactional TransacaoResponseDTO criarEValidarTransacao(TransacaoRequestDTO dto) {
+    public @Transactional TransacaoResponseDTO criarEValidarTransacao(TransacaoRequestDTO dto) {
         Transacao transacao = transacaoMapper.toEntity(dto);
 
         // Chama o motor de regras
-        FraudEngine engine = new FraudEngine();
+        FraudEngine engine = new FraudEngine(rulesCompiler);
         // Analisa a transação
         FraudSummary summary = engine.analyze(transacao);
 
@@ -99,7 +103,7 @@ public class TransacaoService {
                 .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
                 
             // Chama o motor de regras
-            FraudEngine engine = new FraudEngine();
+            FraudEngine engine = new FraudEngine(rulesCompiler);
             // Analisa a transação
             FraudSummary summary = engine.analyze(transacao);
 

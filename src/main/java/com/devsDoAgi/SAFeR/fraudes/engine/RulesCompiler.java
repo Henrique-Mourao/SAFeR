@@ -5,28 +5,38 @@ import com.devsDoAgi.SAFeR.fraudes.rules.RuleValor;
 import com.devsDoAgi.SAFeR.fraudes.rules.emAnalise.RuleValueValidator;
 import com.devsDoAgi.SAFeR.model.Transacao;
 import com.devsDoAgi.SAFeR.repository.TransacaoRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@Data
 public class RulesCompiler {
 
+    @Autowired
     private TransacaoRepository transacaoRepository;
 
+    @Autowired
     private RuleValueValidator ruleValueValidator;
 
+    private List<FraudRule> regras;
+
+    @Autowired
     private RuleValor ruleValor;
+    @PostConstruct
+    public void init() {
+        // Agora o Spring já injetou os beans
+        this.regras = List.of(ruleValueValidator);
+}
 
-    private List<FraudRule> regras = List.of(ruleValueValidator, ruleValor);
-
-
-    public FraudSummary PercorrerRegras(List<FraudRule> rules, Transacao transacao) {
+    public FraudSummary percorrerRegras(Transacao transacao) {
         int totalScore = 0;
 
-        for (FraudRule rule : rules) {
+        for (FraudRule rule : regras) {
             FraudResult result = rule.evaluate(transacao);
             System.out.println("Regra [" + result.getRuleName() + "] -> Score: " + result.getScore());
 
