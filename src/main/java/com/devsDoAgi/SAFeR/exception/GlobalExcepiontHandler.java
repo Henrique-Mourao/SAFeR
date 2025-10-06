@@ -14,8 +14,8 @@ public class GlobalExcepiontHandler {
 
     //TRANSAÇÃO
     @ExceptionHandler(TransactionNotFound.class)
-    public ResponseEntity<ErroResponseDTO> handleTransactionNotFound (TransactionNotFound transac, HttpServletRequest request){
-        ErroResponseDTO error = new ErroResponseDTO(
+    public ResponseEntity<ErrorResponseDTO> handleTransactionNotFound (TransactionNotFound transac, HttpServletRequest request){
+        ErrorResponseDTO error = new ErrorResponseDTO(
                 transac.getMessage(),
                 HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -26,8 +26,8 @@ public class GlobalExcepiontHandler {
 
     //DISPOSITIVO
     @ExceptionHandler(DeviceNotFound.class)
-    public ResponseEntity<ErroResponseDTO> handleDeviceNotFound (DeviceNotFound device, HttpServletRequest request){
-        ErroResponseDTO error = new ErroResponseDTO(
+    public ResponseEntity<ErrorResponseDTO> handleDeviceNotFound (DeviceNotFound device, HttpServletRequest request){
+        ErrorResponseDTO error = new ErrorResponseDTO(
                 device.getMessage(),
                 HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -38,9 +38,9 @@ public class GlobalExcepiontHandler {
 
     //CONTA
     @ExceptionHandler(AccounNotFound.class)
-    public ResponseEntity<ErroResponseDTO> handleAccounNotFound(AccounNotFound acc, HttpServletRequest request){
+    public ResponseEntity<ErrorResponseDTO> handleAccounNotFound(AccounNotFound acc, HttpServletRequest request){
 
-        ErroResponseDTO error = new ErroResponseDTO(
+        ErrorResponseDTO error = new ErrorResponseDTO(
                 acc.getMessage(),
                 HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -51,9 +51,9 @@ public class GlobalExcepiontHandler {
 
     //CLIENTE
     @ExceptionHandler(ClientNotFound.class)
-    public ResponseEntity<ErroResponseDTO> handleClientNotFound (ClientNotFound cli, HttpServletRequest request){
+    public ResponseEntity<ErrorResponseDTO> handleClientNotFound (ClientNotFound cli, HttpServletRequest request){
 
-        ErroResponseDTO error = new ErroResponseDTO(
+        ErrorResponseDTO error = new ErrorResponseDTO(
                 cli.getMessage(),
                 HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -64,14 +64,24 @@ public class GlobalExcepiontHandler {
 
     //RESTRIÇÃO
     @ExceptionHandler(RestrictionNotFound.class)
-    public ResponseEntity<ErroResponseDTO> handleRestrictionNotFound (RestrictionNotFound restri, HttpServletRequest request){
+    public ResponseEntity<ErrorResponseDTO> handleRestrictionNotFound (RestrictionNotFound restri, HttpServletRequest request){
 
-        ErroResponseDTO error = new ErroResponseDTO(
+        ErrorResponseDTO error = new ErrorResponseDTO(
                 restri.getMessage(),
                 HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(EmptyNightLimit.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmptyNightLimit (EmptyNightLimit exe, HttpServletRequest request){
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                exe.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                request.getRequestURI());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }

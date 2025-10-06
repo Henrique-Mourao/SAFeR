@@ -5,7 +5,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class ErroResponseDTO {
+public class ErrorResponseDTO {
     private String menssage;
     private int status;
     private String timeStamp;
