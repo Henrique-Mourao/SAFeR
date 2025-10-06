@@ -16,7 +16,9 @@ import java.util.List;
 
 import com.devsDoAgi.SAFeR.fraudes.interfaces.FraudRule;
 import com.devsDoAgi.SAFeR.fraudes.rules.RuleValor;
+import com.devsDoAgi.SAFeR.fraudes.rules.emAnalise.RuleValueValidator;
 import com.devsDoAgi.SAFeR.model.Transacao;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class FraudEngine {
     private final List<FraudRule> rules;
@@ -25,6 +27,11 @@ public class FraudEngine {
      * Construtor Seletivo
      * Executa apenas as regras que forem atribuidas
      */
+
+    @Autowired
+    public FraudEngine(RuleValueValidator valueValidator) {
+        this.rules = List.of(valueValidator); // usa o bean gerenciado pelo Spring
+    }
 
     public FraudEngine(List<FraudRule> rules) {
         this.rules = rules;
@@ -35,16 +42,16 @@ public class FraudEngine {
      * Executa todas as regras por padrão
      */
 
-    public FraudEngine() {
-        this.rules = (List.of(
-                new RuleValor()
-        ));
-    }
+//    public FraudEngine() {
+//        this.rules = (List.of(
+//                new RuleValueValidator()
+//        ));
+//    }
 
     /**
      * Avalia a transação com todas as regras atribuidas no construtor.
      *
-     * @param Transacao -> Consome um objeto Transacao.
+     * @param transacao -> Consome um objeto Transacao.
      * @return FraudSummary -> Retorna um objeto FraudSummary.
      */
 

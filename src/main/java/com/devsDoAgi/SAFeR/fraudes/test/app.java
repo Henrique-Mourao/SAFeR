@@ -1,6 +1,6 @@
 package com.devsDoAgi.SAFeR.fraudes.test;
 
-import com.devsDoAgi.SAFeR.fraudes.engine.FraudEngine;
+//import com.devsDoAgi.SAFeR.fraudes.engine.FraudEngine;
 import com.devsDoAgi.SAFeR.fraudes.engine.FraudSummary;
 import com.devsDoAgi.SAFeR.model.Transacao;
 
@@ -16,9 +16,9 @@ public class app {
                 new RuleOrigen()
         ));*/
 
-        FraudEngine engine = new FraudEngine();
+        //FraudEngine engine = new FraudEngine();
 
-        FraudSummary summary = engine.analyze(tx);
+        //FraudSummary summary = engine.analyze(tx);
 
     }
 }

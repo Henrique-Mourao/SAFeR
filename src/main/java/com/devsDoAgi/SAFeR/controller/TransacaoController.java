@@ -2,6 +2,10 @@ package com.devsDoAgi.SAFeR.controller;
 
 import java.util.List;
 
+import com.devsDoAgi.SAFeR.fraudes.engine.FraudResult;
+import com.devsDoAgi.SAFeR.mapper.TransacaoMapper;
+import com.devsDoAgi.SAFeR.model.Transacao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +24,20 @@ import com.devsDoAgi.SAFeR.service.TransacaoService;
 @RequestMapping("/transacoes")
 public class TransacaoController {
 
+    @Autowired
     private final TransacaoService transacaoService;
+    @Autowired
+    private TransacaoMapper transacaoMapper;
+
 
     public TransacaoController(TransacaoService transacaoService) {
         this.transacaoService = transacaoService;
+    }
+
+    @PostMapping("/testeluan")
+    public TransacaoResponseDTO validarTransacao(@RequestBody TransacaoRequestDTO dto){
+        Transacao transacao = transacaoMapper.toEntity(dto);
+        return transacaoService.testeValidacao(transacao);
     }
 
     @PostMapping

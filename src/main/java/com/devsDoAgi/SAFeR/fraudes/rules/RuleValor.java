@@ -22,17 +22,17 @@ public class RuleValor implements FraudRule {
      * Override evaluate -> Regra de valor
      * Método que vai receber os critérios de avaliação da regra.
      *
-     * @param Transacao -> Consome um objeto Transacao.
+     * @param transacao -> Consome um objeto Transacao.
      * @return FraudResult -> Retorna um objeto FraudResult.
      */
 
     @Override
     public FraudResult evaluate(Transacao transacao) {
-        
+
         if (transacao.getValor().compareTo(new BigDecimal(5000.00)) > 0) {
             return new FraudResult(ruleName, 10);
         }
-        
+
         return new FraudResult(ruleName, 0);
     }
 }

@@ -20,6 +20,8 @@ import com.devsDoAgi.SAFeR.model.Transacao;
 
 @Service
 public class TransacaoService {
+
+
     
     private final TransacaoRepository transacaoRepository;
     private final ContaRepository contaRepository;

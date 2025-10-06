@@ -38,6 +38,8 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	implementation 'me.paulschwarz:spring-dotenv:3.0.0'
 
+	//SWAGGER
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
 
 	// SMILE
 	implementation 'com.github.haifengl:smile-core:4.4.1' // Or smile-deep, smile-nlp
