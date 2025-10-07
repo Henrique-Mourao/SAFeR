@@ -72,9 +72,9 @@ public class RuleValueValidator implements FraudRule {
         //  0 -> if a == b
         // -1 -> if a < b
 
-        if (ceiling.compareTo(transactionValue) >= 0){
+        if (ceiling.compareTo(transactionValue) > 0){
             return new FraudResult("Value rule", 0);
-        } else if (transactionValue.compareTo(ceiling) == 1 && transactionValue.compareTo(tolerance) == -1) {
+        } else if (transactionValue.compareTo(ceiling) == 0 && transactionValue.compareTo(tolerance) == -1) {
             return new FraudResult("Value rule", 10);
         } else {
             return new FraudResult("Value rule", 50); //Automaticamente confirmado como fraude

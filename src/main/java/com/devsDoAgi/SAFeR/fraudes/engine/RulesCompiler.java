@@ -2,6 +2,7 @@ package com.devsDoAgi.SAFeR.fraudes.engine;
 
 import com.devsDoAgi.SAFeR.fraudes.interfaces.FraudRule;
 import com.devsDoAgi.SAFeR.fraudes.rules.RuleValor;
+import com.devsDoAgi.SAFeR.fraudes.rules.emAnalise.RuleTime;
 import com.devsDoAgi.SAFeR.fraudes.rules.emAnalise.RuleValueValidator;
 import com.devsDoAgi.SAFeR.model.Transacao;
 import com.devsDoAgi.SAFeR.repository.TransacaoRepository;
@@ -23,6 +24,9 @@ public class RulesCompiler {
     @Autowired
     private RuleValueValidator ruleValueValidator;
 
+    @Autowired
+    private RuleTime ruleTime;
+
     private List<FraudRule> regras;
 
     @Autowired
@@ -30,7 +34,7 @@ public class RulesCompiler {
     @PostConstruct
     public void init() {
         // Agora o Spring já injetou os beans
-        this.regras = List.of(ruleValueValidator);
+        this.regras = List.of(ruleValueValidator, ruleTime);
 }
 
     public FraudSummary percorrerRegras(Transacao transacao) {
