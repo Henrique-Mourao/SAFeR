@@ -18,7 +18,6 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class RuleTime implements FraudRule {
 
-
     ContaRepository contaRepository;
 
     public Boolean isInRiskTime(Transacao transacao){
@@ -43,14 +42,7 @@ public class RuleTime implements FraudRule {
                 throw new EmptyNightLimit("O cliente não possui um limite noturno definido");
             }
 
-//              Verifica se o valor da transação é menor ou igual ao teto de alarme
-//
-//              a.compareTo(b) -> retornará
-//              1 -> if a > b
-//              0 -> if a == b
-//             -1 -> if a < b
-
-            if (value.compareTo(limiteNoturno) > 0) {
+            if (value.compareTo(limiteNoturno) > 3) {
                 FraudResult fraudResult = new FraudResult("Regra horário de risco",50);
                 return fraudResult;
             }
@@ -60,7 +52,6 @@ public class RuleTime implements FraudRule {
             }
 
         }
-        //Minimo grau de suspeita para transações feitas em periodo noturno
-        return new FraudResult("Regra horário de risco",3);
+        return new FraudResult("Regra horário de risco",0);
     }
 }
