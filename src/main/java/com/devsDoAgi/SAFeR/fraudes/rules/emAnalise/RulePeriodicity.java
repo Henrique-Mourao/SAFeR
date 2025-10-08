@@ -75,18 +75,27 @@ public class RulePeriodicity implements FraudRule {
     public List<Transacao> getLastHour(Transacao transaction) {
         LocalDateTime dataTransacao = transaction.getDataHoraOperacao();
         System.out.println(dataTransacao);
-        System.out.println("Menos -1H");
+        System.out.println("Menos -1H -----------------------------");
         LocalDateTime lastHour = dataTransacao.minusHours(1);
         System.out.println(lastHour);
         List<Transacao> transacoes = transacaoRepository.findAll().stream()
                 .filter(t -> t.getNumContaDestino().equals(transaction.getNumContaDestino()))
                 .toList();
+//        for (Transacao t: transacoes){
+//            System.out.println(t.getDataHoraOperacao());
+//        }
+        ArrayList<Transacao> lastHourTransaction = new ArrayList<>();
         for (Transacao t: transacoes){
-            System.out.println(t.getDataHoraOperacao());
+            if (t.getDataHoraOperacao().isAfter(lastHour) && t.getDataHoraOperacao().isBefore(transaction.getDataHoraOperacao())){
+                System.out.println(t);
+                lastHourTransaction.add(t);
+            }
         }
-        List<Transacao> lastHourTransaction = transacoes.stream()
-                .filter(t -> t.getDataHoraOperacao().isAfter(lastHour))
-                .toList();
+
+//        List<Transacao> lastHourTransaction = transacoes.stream()
+//                .filter(t -> t.getDataHoraOperacao().isAfter(lastHour))
+//                .toList();
+        System.out.println("Last hour:" + lastHourTransaction);
         List<Transacao> sortedLastHourTransaction = lastHourTransaction.stream().sorted(Comparator.comparing(Transacao::getDataHoraOperacao)).toList();
         return sortedLastHourTransaction;
     }
