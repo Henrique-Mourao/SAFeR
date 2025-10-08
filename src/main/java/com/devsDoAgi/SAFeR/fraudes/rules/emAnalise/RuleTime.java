@@ -43,12 +43,12 @@ public class RuleTime implements FraudRule {
                 throw new EmptyNightLimit("O cliente não possui um limite noturno definido");
             }
 
-            //  Verifica se o valor da transação é menor ou igual ao teto de alarme
-
-            //  a.compareTo(b) -> retornará
-            //  1 -> if a > b
-            //  0 -> if a == b
-            // -1 -> if a < b
+//              Verifica se o valor da transação é menor ou igual ao teto de alarme
+//
+//              a.compareTo(b) -> retornará
+//              1 -> if a > b
+//              0 -> if a == b
+//             -1 -> if a < b
 
             if (value.compareTo(limiteNoturno) > 0) {
                 FraudResult fraudResult = new FraudResult("Regra horário de risco",50);
@@ -60,6 +60,7 @@ public class RuleTime implements FraudRule {
             }
 
         }
-        return new FraudResult("Regra horário de risco",0);
+        //Minimo grau de suspeita para transações feitas em periodo noturno
+        return new FraudResult("Regra horário de risco",3);
     }
 }

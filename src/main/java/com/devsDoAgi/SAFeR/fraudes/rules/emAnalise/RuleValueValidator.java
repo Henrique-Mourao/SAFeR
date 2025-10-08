@@ -82,9 +82,9 @@ public class RuleValueValidator implements FraudRule {
 
     }
 
-//    public boolean isHighValue (Transacao transacao){ //Metodo para auxilio de outras regras
-//        FraudResult resultadoFraude = evaluate(transacao);
-//        return resultadoFraude.getScore() >= 10;
-//    }
+    public boolean isHighValue (Transacao transacao){ //Metodo para auxilio de outras regras
+        FraudResult resultadoFraude = evaluate(transacao);
+        return resultadoFraude.getScore() >= 10;
+    }
 
 }
