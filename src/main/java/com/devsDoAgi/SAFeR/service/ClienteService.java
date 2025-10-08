@@ -3,7 +3,6 @@ package com.devsDoAgi.SAFeR.service;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.devsDoAgi.SAFeR.exception.AccounNotFound;
 import com.devsDoAgi.SAFeR.exception.ClientNotFound;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +48,7 @@ public class ClienteService {
     @Transactional
     public ClienteResponseDTO atualizarCliente(String cpf, ClienteRequestDTO dto) {
         Cliente cliente = clienteRepository.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ClientNotFound("Cliente não encontrado"));
         cliente.setNome(dto.getNome());
         cliente.setDataNascimento(LocalDate.parse(dto.getDataNascimento()));
         cliente.setScore(dto.getScore());
@@ -61,7 +60,7 @@ public class ClienteService {
     @Transactional
     public ClienteResponseDTO desativarCliente(String cpf) {
         Cliente cliente = clienteRepository.findById(cpf)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ClientNotFound("Cliente não encontrado"));
         cliente.setAtivo(false);
         Cliente desativado = clienteRepository.save(cliente);
         return clienteMapper.toResponseDTO(desativado);

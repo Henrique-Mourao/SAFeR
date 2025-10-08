@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
-import com.devsDoAgi.SAFeR.exception.AccounNotFound;
+import com.devsDoAgi.SAFeR.exception.AccountNotFound;
+import com.devsDoAgi.SAFeR.exception.ClientNotFound;
+import com.devsDoAgi.SAFeR.exception.DeviceNotFound;
 import org.springframework.stereotype.Service;
 
 import com.devsDoAgi.SAFeR.dto.ContaRequestDTO;
@@ -57,13 +59,13 @@ public class ContaService {
 
         // Busca o cliente no banco pelo CPF informado
         Cliente cliente = clienteRepository.findById(dto.getCpfCliente())
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new ClientNotFound("Cliente não encontrado"));
         conta.setCliente(cliente);
 
         // Busca o dispositivo no banco pelo ID informado
         if (dto.getIdDispositivo() != null) {
             Dispositivo dispositivo = dispositivoRepository.findById(dto.getIdDispositivo())
-                .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado"));
+                .orElseThrow(() -> new DeviceNotFound("Dispositivo não encontrado"));
             conta.setDispositivo(dispositivo);
         }
 
@@ -85,7 +87,7 @@ public class ContaService {
     @Transactional
     public ContaResponseDTO buscarConta(String numConta) {
         Conta conta = contaRepository.findById(numConta)
-                .orElseThrow(() -> new AccounNotFound("Conta não encontrada"));
+                .orElseThrow(() -> new AccountNotFound("Conta não encontrada"));
         return contaMapper.toResponseDTO(conta);
     }
 
@@ -125,12 +127,12 @@ public class ContaService {
     @Transactional
     public ContaResponseDTO atualizarConta(String numConta, ContaRequestDTO dto) {
         Conta contaExistente = contaRepository.findById(numConta)
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+                .orElseThrow(() -> new AccountNotFound("Conta não encontrada"));
         contaExistente.setNumAgencia(dto.getNumAgencia());
 
         if (dto.getIdDispositivo() != null) {
             contaExistente.setDispositivo(dispositivoRepository.findById(dto.getIdDispositivo())
-                    .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado")));
+                    .orElseThrow(() -> new DeviceNotFound("Dispositivo não encontrado")));
         }
 
         contaExistente.setLimiteNoturno(new BigDecimal(dto.getLimiteNoturno()));
@@ -151,7 +153,7 @@ public class ContaService {
     @Transactional
     public ContaResponseDTO encerrarConta(String numConta) {
         Conta contaExistente = contaRepository.findById(numConta)
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+                .orElseThrow(() -> new AccountNotFound("Conta não encontrada"));
         contaExistente.setStatus(ContaStatus.ENCERRADA);
         Conta encerrada = contaRepository.save(contaExistente);
         return contaMapper.toResponseDTO(encerrada);
@@ -160,7 +162,7 @@ public class ContaService {
     @Transactional
     public ContaResponseDTO ativarConta(String numConta) {
         Conta contaExistente = contaRepository.findById(numConta)
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+                .orElseThrow(() -> new AccountNotFound("Conta não encontrada"));
         contaExistente.setStatus(ContaStatus.ATIVA);
         Conta ativada = contaRepository.save(contaExistente);
         return contaMapper.toResponseDTO(ativada);

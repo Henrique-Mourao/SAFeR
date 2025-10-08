@@ -48,7 +48,7 @@ public class RestricaoService {
     @Transactional
     public RestricaoResponseDTO atualizarRestricaoNormal(String id) {
         Restricao restricao = restricaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CPF não encontrado"));
+                .orElseThrow(() -> new RestrictionNotFound("CPF não encontrado"));
         restricao.setStatus(RestricaoStatus.SEM_RESTRICAO);
         Restricao atualizada = restricaoRepository.save(restricao);
         return restricaoMapper.toResponseDTO(atualizada);
@@ -57,7 +57,7 @@ public class RestricaoService {
     @Transactional
     public RestricaoResponseDTO atualizarRestricaoRestrito(String id) {
         Restricao restricao = restricaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CPF não encontrado"));
+                .orElseThrow(() -> new RestrictionNotFound("CPF não encontrado"));
         restricao.setStatus(RestricaoStatus.COM_RESTRICAO);
         Restricao atualizada = restricaoRepository.save(restricao);
         return restricaoMapper.toResponseDTO(atualizada);
@@ -66,7 +66,7 @@ public class RestricaoService {
     @Transactional
     public RestricaoResponseDTO atualizarRestricaoBloqueado(String id) {
         Restricao restricao = restricaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CPF não encontrado"));
+                .orElseThrow(() -> new RestrictionNotFound("CPF não encontrado"));
         restricao.setStatus(RestricaoStatus.BLOQUEADO);
         Restricao atualizada = restricaoRepository.save(restricao);
         return restricaoMapper.toResponseDTO(atualizada);
@@ -75,7 +75,7 @@ public class RestricaoService {
     @Transactional
     public RestricaoResponseDTO atualizarRestricaoCancelado(String id) {
         Restricao restricao = restricaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CPF não encontrado"));
+                .orElseThrow(() -> new RestrictionNotFound("CPF não encontrado"));
         restricao.setStatus(RestricaoStatus.CANCELADO);
         Restricao atualizada = restricaoRepository.save(restricao);
         return restricaoMapper.toResponseDTO(atualizada);

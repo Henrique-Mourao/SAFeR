@@ -48,7 +48,7 @@ public class DispositivoService {
     @Transactional
     public DispositivoResponseDTO atualizarDispositivo(Long id, DispositivoRequestDTO dto) {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado"));
+                .orElseThrow(() -> new DeviceNotFound("Dispositivo não encontrado"));
         dispositivo.setLocal(dto.getLocal());
         Dispositivo atualizado = dispositivoRepository.save(dispositivo);
         return dispositivoMapper.toResponseDTO(atualizado);
@@ -57,7 +57,7 @@ public class DispositivoService {
     @Transactional
     public DispositivoResponseDTO bloquearDispositivo(Long id) {
         Dispositivo dispositivo = dispositivoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dispositivo não encontrado"));
+                .orElseThrow(() -> new DeviceNotFound("Dispositivo não encontrado"));
         dispositivo.setStatus(DispositivoStatus.NAO_AUTORIZADO);
         Dispositivo dispositivoBloqueado = dispositivoRepository.save(dispositivo);
         return dispositivoMapper.toResponseDTO(dispositivoBloqueado);

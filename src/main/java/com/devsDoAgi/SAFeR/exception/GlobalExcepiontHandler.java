@@ -37,8 +37,8 @@ public class GlobalExcepiontHandler {
     }
 
     //CONTA
-    @ExceptionHandler(AccounNotFound.class)
-    public ResponseEntity<ErroResponseDTO> handleAccounNotFound(AccounNotFound acc, HttpServletRequest request){
+    @ExceptionHandler(AccountNotFound.class)
+    public ResponseEntity<ErroResponseDTO> handleAccounNotFound(AccountNotFound acc, HttpServletRequest request){
 
         ErroResponseDTO error = new ErroResponseDTO(
                 acc.getMessage(),

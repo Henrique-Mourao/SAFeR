@@ -1,6 +1,6 @@
 package com.devsDoAgi.SAFeR.fraudes.rules.emAnalise;
 
-import com.devsDoAgi.SAFeR.exception.AccounNotFound;
+import com.devsDoAgi.SAFeR.exception.AccountNotFound;
 import com.devsDoAgi.SAFeR.fraudes.engine.FraudResult;
 import com.devsDoAgi.SAFeR.fraudes.interfaces.FraudRule;
 import com.devsDoAgi.SAFeR.model.Conta;
@@ -35,7 +35,7 @@ public class RuleValue implements FraudRule {
 
         final BigDecimal BASE_CEILING = new BigDecimal(1000.00);
 
-        Conta conta = contaRepository.findById(transacao.getNumContaOrigem()).orElseThrow(()-> new AccounNotFound("Conta não encontrada"));
+        Conta conta = contaRepository.findById(transacao.getNumContaOrigem()).orElseThrow(()-> new AccountNotFound("Conta não encontrada"));
 
         List<Transacao> transacoes  = conta.getHistoricoTransacoes();
 

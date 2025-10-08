@@ -2,9 +2,9 @@ package com.devsDoAgi.SAFeR.service;
 
 import java.util.List;
 
+import com.devsDoAgi.SAFeR.exception.AccountNotFound;
 import com.devsDoAgi.SAFeR.exception.TransactionNotFound;
 import com.devsDoAgi.SAFeR.fraudes.engine.FraudCompiler;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.devsDoAgi.SAFeR.repository.ContaRepository;
@@ -76,20 +76,20 @@ public class TransacaoService {
     @Transactional
     public TransacaoResponseDTO adicionarHistorico(Long id) {
         Transacao transacao = transacaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+                .orElseThrow(() -> new TransactionNotFound("Transação não encontrada"));
         Conta conta = contaRepository.findById(transacao.getNumContaOrigem())
-                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
-        if (conta != null) {
-            conta.addTransacao(transacao);
-            contaRepository.save(conta);
-        }
+                .orElseThrow(() -> new AccountNotFound("Conta não encontrada"));
+
+        conta.addTransacao(transacao);
+        contaRepository.save(conta);
+
         return transacaoMapper.toResponseDTO(transacao);
     }
 
     @Transactional
     public TransacaoResponseDTO atualizarTransacao(Long id, TransacaoRequestDTO dto) {
         Transacao transacao = transacaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+                .orElseThrow(() -> new TransactionNotFound("Transação não encontrada"));
         transacao.setScoreTransacao(dto.getScoreTransacao());
         transacao.setTransacaoAnalisada(true);
         Transacao atualizada = transacaoRepository.save(transacao);
@@ -99,7 +99,7 @@ public class TransacaoService {
     @Transactional
     public TransacaoResponseDTO validarTransacao(Long id) {
         Transacao transacao = transacaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+                .orElseThrow(() -> new TransactionNotFound("Transação não encontrada"));
                 
             // Chama o motor de regras
             FraudEngine engine = new FraudEngine(fraudCompiler);
