@@ -5,6 +5,7 @@ import com.devsDoAgi.SAFeR.fraudes.engine.FraudResult;
 import com.devsDoAgi.SAFeR.fraudes.interfaces.FraudRule;
 import com.devsDoAgi.SAFeR.model.Transacao;
 import com.devsDoAgi.SAFeR.repository.ContaRepository;
+import com.devsDoAgi.SAFeR.repository.TransacaoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.*;
 public class RulePeriodicity implements FraudRule {
 
     private ContaRepository contaRepository;
+    private TransacaoRepository transacaoRepository;
     private RuleValueValidator ruleValueValidator;
 
 
@@ -69,21 +71,25 @@ public class RulePeriodicity implements FraudRule {
         return totalScore;
     }
 
-
     //Retorna as transações de mesmo tipo feitas na ultimas hora
     public List<Transacao> getLastHour(Transacao transaction) {
         LocalDateTime dataTransacao = transaction.getDataHoraOperacao();
+        System.out.println(dataTransacao);
+        System.out.println("Menos -1H");
         LocalDateTime lastHour = dataTransacao.minusHours(1);
-        List<Transacao> transacoes = contaRepository.findById(transaction.getNumContaOrigem())
-                .orElseThrow(() -> new AccounNotFound("Conta não encontrada"))
-                .getHistoricoTransacoes();
+        System.out.println(lastHour);
+        List<Transacao> transacoes = transacaoRepository.findAll().stream()
+                .filter(t -> t.getNumContaDestino().equals(transaction.getNumContaDestino()))
+                .toList();
+        for (Transacao t: transacoes){
+            System.out.println(t.getDataHoraOperacao());
+        }
         List<Transacao> lastHourTransaction = transacoes.stream()
-                .filter(t -> t.getDataHoraOperacao().isAfter(lastHour) && t.getMeioPagamento().equals(transaction.getMeioPagamento()))
+                .filter(t -> t.getDataHoraOperacao().isAfter(lastHour))
                 .toList();
         List<Transacao> sortedLastHourTransaction = lastHourTransaction.stream().sorted(Comparator.comparing(Transacao::getDataHoraOperacao)).toList();
         return sortedLastHourTransaction;
     }
-
 
     protected Duration calcPeriod(Transacao t1, Transacao t2) {
         LocalDateTime dataT1 = t1.getDataHoraOperacao();

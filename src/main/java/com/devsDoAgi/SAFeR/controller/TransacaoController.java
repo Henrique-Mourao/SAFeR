@@ -3,8 +3,10 @@ package com.devsDoAgi.SAFeR.controller;
 import java.util.List;
 
 import com.devsDoAgi.SAFeR.fraudes.engine.FraudResult;
+import com.devsDoAgi.SAFeR.fraudes.rules.emAnalise.RulePeriodicity;
 import com.devsDoAgi.SAFeR.mapper.TransacaoMapper;
 import com.devsDoAgi.SAFeR.model.Transacao;
+import com.devsDoAgi.SAFeR.repository.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +30,20 @@ public class TransacaoController {
     private final TransacaoService transacaoService;
     @Autowired
     private TransacaoMapper transacaoMapper;
+    @Autowired
+    private RulePeriodicity rulePeriodicity;
+    @Autowired
+    private TransacaoRepository transacaoRepository;
 
 
     public TransacaoController(TransacaoService transacaoService) {
         this.transacaoService = transacaoService;
+    }
+
+    @GetMapping("/getLastHour/{id}")
+    public List<Transacao> getLastHour(@PathVariable Long id){
+        Transacao transacao = transacaoRepository.findById(id).get();
+        return rulePeriodicity.getLastHour(transacao);
     }
 
     @PostMapping("/testeluan")
