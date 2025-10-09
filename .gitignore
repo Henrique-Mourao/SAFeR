@@ -1,0 +1,98 @@
+.env
+# =========================
+# Sistema Operacional
+# =========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.swp
+*~
+
+# =========================
+# IntelliJ IDEA
+# =========================
+.idea/
+*.iml
+*.iws
+out/
+# Só versionar se houver codestyles ou inspectionProfiles compartilhados
+# !.idea/codestyles/
+# !.idea/inspectionProfiles/
+
+# =========================
+# Eclipse / NetBeans (caso apareça)
+# =========================
+.project
+.classpath
+.settings/
+nbproject/private/
+
+# =========================
+# Build / Dependências
+# =========================
+build/
+target/
+out/
+*.jar
+*.war
+*.ear
+*.class
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+build/
+
+# =========================
+# Maven
+# =========================
+.mvn/
+!mvn/wrapper/maven-wrapper.jar
+target/
+
+# =========================
+# Logs
+# =========================
+*.log
+*.tmp
+
+# =========================
+# Arquivos de configuração local
+# =========================
+*.env
+*.local
+*.properties
+*.iml
+
+# =========================
+# Testes e relatórios
+# =========================
+*.test
+*.out
+*.csv
+*.xml.env
+
+
+# =========================
+# Evita erros de dados de cache
+# =========================
+
+.gradle/8.14.3/checksums/checksums.lock
+.gradle/8.14.3/checksums/md5-checksums.bin
+.gradle/8.14.3/checksums/sha1-checksums.bin
+.gradle/8.14.3/executionHistory/executionHistory.bin
+.gradle/8.14.3/executionHistory/executionHistory.lock
+.gradle/8.14.3/fileChanges/last-build.bin
+.gradle/8.14.3/fileHashes/fileHashes.bin
+.gradle/8.14.3/fileHashes/fileHashes.lock
+.gradle/8.14.3/fileHashes/resourceHashesCache.bin
+.gradle/8.14.3/gc.properties
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/cache.properties
+.gradle/buildOutputCleanup/outputFiles.bin
+.gradle/file-system.probe
+.gradle/vcs-1/gc.properties
+build/reports/problems/problems-report.html
