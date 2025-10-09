@@ -29,7 +29,6 @@ public class TransacaoController {
         this.transacaoService = transacaoService;
     }
 
-
     @PostMapping("/testeRegras")
     public TransacaoResponseDTO validarTransacao(@RequestBody TransacaoRequestDTO dto){
         return transacaoService.criarEValidarTransacao(dto);

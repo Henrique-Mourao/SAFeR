@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
-    @Query(value = "select * from transacoes order by operation_date_time desc limit 1",nativeQuery = true)
+    @Query(value = "select * from transacoes order by data_hora_operacao desc limit 1",nativeQuery = true)
     public Optional<Transacao> getLastTransaction();
 }

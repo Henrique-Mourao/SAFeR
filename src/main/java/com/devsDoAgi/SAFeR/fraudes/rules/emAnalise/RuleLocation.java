@@ -17,7 +17,6 @@ import java.util.Optional;
 @Service
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class RuleLocation implements FraudRule {
 
     @Autowired
@@ -34,7 +33,7 @@ public class RuleLocation implements FraudRule {
 
         //Criação de objetos para calculo de distancia entre pontos
         Point currentLocation = ctx.getShapeFactory().pointXY(currentlongitude, currentLatitude);
-        Point lastLocation = ctx.getShapeFactory().pointXY(lastLongitude,lastLatitude);
+        Point lastLocation = ctx.getShapeFactory().pointXY(lastLongitude, lastLatitude);
 
         //Faz o calculo da distancia dos dois pontos em graus e depois utiliza a constante DEG_TO_KM para converção em KM
         Double distance = ctx.calcDistance(currentLocation, lastLocation) * DistanceUtils.DEG_TO_KM;
@@ -53,11 +52,6 @@ public class RuleLocation implements FraudRule {
 
     }
 
-    //Calcula o tempo entre ultima transação e atual
-    private Duration calcPeriod(Transacao currentTransaction, Transacao lastTransaction) {
-        return Duration.between(lastTransaction.getDataHoraOperacao(), currentTransaction.getDataHoraOperacao());
-    }
-
     @Override
     public FraudResult evaluate(Transacao currentTransaction) {
 
@@ -74,25 +68,27 @@ public class RuleLocation implements FraudRule {
             Double lastLongitude = lastTransaction.getLocal()[0];
             Double lastLatitude = lastTransaction.getLocal()[1];
 
+            if (currentlongitude != lastLongitude && currentLatitude != lastLatitude) {
+                // Tempo entre ultima transação e atual
+                Duration periodBtwTransaction = Duration.between(lastTransaction.getDataHoraOperacao(), currentTransaction.getDataHoraOperacao());
 
-            Duration periodBtwTransaction = calcPeriod(currentTransaction, lastTransaction);
+                // Compara a duração entre transações com o ideal
+                // Se o resultado for negativo ou igual a zero signififica que o periodo entre transações é classificável para ativação da regra
+                if (periodBtwTransaction.compareTo(maxAcceptablePeriod) <= 0) { //Verifica se transações acontecem em locais diferentes
+                    Double distanceInKm = calcDistanceInKm(currentTransaction, lastTransaction);  //Calculo da distancia entre as duas localizações
+                    Duration minimumTime = calcMinimumTime(distanceInKm);
 
+                    // Se resultado for negativo, a transação é considerada impossivel
+                    if (periodBtwTransaction.compareTo(minimumTime) <= 0) {
 
-            //Compara a duração entre transações com o ideal
-            //Se o resultado for negativo ou igual a zero signififica que o periodo entre transações é valido para ativação da regra
-            if (periodBtwTransaction.compareTo(maxAcceptablePeriod) <= 0
-                    && currentlongitude != lastLongitude
-                    && currentLatitude != lastLatitude) { //Verifica se transações acontecem em locais diferentes
-
-                Double distanceInKm = calcDistanceInKm(currentTransaction, lastTransaction);  //Calculo da distancia entre as duas localizações
-                Duration minimumTime = calcMinimumTime(distanceInKm);
-
-                //Se resultado for negativo, a transação é considerada impossivel
-                if (periodBtwTransaction.compareTo(minimumTime) <= 0) {
-                    return new FraudResult("Regra de localização", 25); //Alta chance de ser fraude
+                        return new FraudResult("Regra de localização", 90); //Alta chance de ser fraude
+                    } else {
+                        return new FraudResult("Regra de localização", 0);
+                    }
                 }
-
             }
+
         }
         return new FraudResult("Regra de localização", 0);
-    }}
+    }
+}
