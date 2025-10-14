@@ -46,24 +46,35 @@ public class TransacaoService {
     public TransacaoResponseDTO criarEValidarTransacao(TransacaoRequestDTO dto) {
         Transacao transacao = transacaoMapper.toEntity(dto);
 
+        Conta conta = contaRepository.findById(transacao.getNumContaOrigem())
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
         // Chama o motor de regras
         FraudEngine engine = new FraudEngine(fraudCompiler);
         // Analisa a transação
         FraudSummary summary = engine.analyze(transacao);
-
         // Atualiza a transação com o score e marca como analisada
         transacao.setScoreTransacao(summary.getTotalScore());
         transacao.setTransacaoAnalisada(true);
+        // Atualiza o score do cliente
+        if (conta != null) {
+            conta.addTransacao(transacao);
+            conta.getCliente().setScore(
+                    conta.getHistoricoTransacoes().stream()
+                            .mapToInt(Transacao::getScoreTransacao)
+                            .sum() / conta.getHistoricoTransacoes().size());
+            contaRepository.save(conta);
+        }
 
         Transacao salva = transacaoRepository.save(transacao);
         return transacaoMapper.toResponseDTO(salva);
     }
 
     @Transactional
-    public TransacaoResponseDTO buscarPorId(Long id) { 
+    public TransacaoResponseDTO buscarPorId(Long id) {
         Transacao transacao = transacaoRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFound("Transação não encontrada"));
-    return transacaoMapper.toResponseDTO(transacao);
+        return transacaoMapper.toResponseDTO(transacao);
     }
 
     @Transactional
@@ -80,6 +91,11 @@ public class TransacaoService {
                 .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
         if (conta != null) {
             conta.addTransacao(transacao);
+            // Atualiza Score na cliente
+            conta.getCliente().setScore(
+                    conta.getHistoricoTransacoes().stream()
+                            .mapToInt(Transacao::getScoreTransacao)
+                            .sum() / conta.getHistoricoTransacoes().size());
             contaRepository.save(conta);
         }
         return transacaoMapper.toResponseDTO(transacao);
@@ -99,16 +115,26 @@ public class TransacaoService {
     public TransacaoResponseDTO validarTransacao(Long id) {
         Transacao transacao = transacaoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
-                
-            // Chama o motor de regras
-            FraudEngine engine = new FraudEngine(fraudCompiler);
-            // Analisa a transação
-            FraudSummary summary = engine.analyze(transacao);
+        Conta conta = contaRepository.findById(transacao.getNumContaOrigem())
+                .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
 
-            // Atualiza a transação com o score e marca como analisada
-            transacao.setScoreTransacao(summary.getTotalScore());
-            transacao.setTransacaoAnalisada(true);
-                
+        // Chama o motor de regras
+        FraudEngine engine = new FraudEngine(fraudCompiler);
+        // Analisa a transação
+        FraudSummary summary = engine.analyze(transacao);
+        // Atualiza a transação com o score e marca como analisada
+        transacao.setScoreTransacao(summary.getTotalScore());
+        transacao.setTransacaoAnalisada(true);
+        // Atualiza o score do cliente
+        if (conta != null) {
+            conta.addTransacao(transacao);
+            conta.getCliente().setScore(
+                    conta.getHistoricoTransacoes().stream()
+                            .mapToInt(Transacao::getScoreTransacao)
+                            .sum() / conta.getHistoricoTransacoes().size());
+            contaRepository.save(conta);
+        }
+
         Transacao salva = transacaoRepository.save(transacao);
         return transacaoMapper.toResponseDTO(salva);
     }

@@ -12,8 +12,6 @@ package com.devsDoAgi.SAFeR.fraudes.engine;
  * Junta os resultados em um FraudSummary.
  */
 
-import com.devsDoAgi.SAFeR.fraudes.engine.FraudSummary;
-import com.devsDoAgi.SAFeR.fraudes.engine.FraudCompiler;
 import com.devsDoAgi.SAFeR.model.Transacao;
 import lombok.AllArgsConstructor;
 

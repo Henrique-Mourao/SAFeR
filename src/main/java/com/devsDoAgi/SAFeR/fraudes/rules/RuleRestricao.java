@@ -3,7 +3,6 @@ package com.devsDoAgi.SAFeR.fraudes.rules;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.devsDoAgi.SAFeR.enums.RestricaoStatus;
-import com.devsDoAgi.SAFeR.exception.RestrictionNotFound;
 import com.devsDoAgi.SAFeR.fraudes.engine.FraudResult;
 import com.devsDoAgi.SAFeR.fraudes.interfaces.FraudRule;
 import com.devsDoAgi.SAFeR.model.Restricao;

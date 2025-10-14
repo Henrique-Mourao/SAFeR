@@ -28,7 +28,7 @@ public class FraudSummary {
      */
 
     public boolean isFraud() {
-        return totalScore >= 60;
+        return totalScore >= 90;
     }
 
     /**
@@ -38,7 +38,7 @@ public class FraudSummary {
      */
 
     public boolean needsReview() {
-        return totalScore >= 30;
+        return totalScore >= 50;
     }
 
     /**
@@ -48,7 +48,7 @@ public class FraudSummary {
      */
 
     public boolean isClean() {
-        return totalScore < 30;
+        return totalScore < 50;
     }
 
     // Getters
